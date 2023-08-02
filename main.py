@@ -31,11 +31,11 @@ def decodificar(texto):
   return ''.join([DECODIFICA.get(c, c) for c in texto])
 
 # Exibe caixa de mensagem com título e texto fornecidos
-def mostrar_mensagem(msg, titulo):
+def mostrar_mensagem(mensagem, titulo):
   msg = QMessageBox()
   msg.setIcon(QMessageBox.Information)
   msg.setWindowTitle(titulo)
-  msg.setText(msg)
+  msg.setText(mensagem) # Passando a string da mensagem
   msg.exec_()
   
 # Limpa o conteúdo da caixa de texto  
