@@ -1,85 +1,79 @@
-from PyQt5 import uic, QtWidgets
+import sys
+from PyQt5 import uic
+from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtWidgets import QMessageBox
 
+# Dicionário de codificação contendo o mapeamento de caracteres
+# para seus respectivos símbolos codificados 
+CODIFICA = {'a':'ꔽ', 'á':'𑢡', 'à':'𑢢', 'â':'𑢥', 'ã':'𑢧', 'A':'𑢾', 'Á':'𑢨', 
+    'À':'𑢫', 'Â':'𑢬', 'Ã':'𑢭', 'b':'ꔑ', 'B':'𑢯', 'c':'ꔾ', 'C':'𑢱', 'd':'ꔉ', 
+    'D':'𑢳', 'e':'ꔿ', 'é':'ꔃ', 'ê':'𑢴', 'E':'𑢶', 'É':'𑢷', 'Ê':'𑢹', 'f':'𑣤', 
+    'F':'𑢺', 'g':'ꕀ', 'G':'𑢽', 'h':'ꔊ', 'H':'𑢾', 'i':'ꔀ', 'I':'𑣊', 'j':'ꔄ', 
+    'J':'𑣋', 'l':'ꔌ', 'L':'𑣌', 'm':'ꕁ', 'M':'𑣍', 'o':'ꔅ', 'ó':'𑣎', 'ô':'𑣑', 
+    'O':'𑣏', 'Ó':'𑣐', 'Ô':'𑣒', 'p':'ꔆ', 'P':'𑣓', 'q':'ꔍ', 'Q':'𑣔', 'r':'ꔁ', 
+    'R':'𑣕', 's':'ꔇ', 'S':'𑣖', 't':'ꔎ', 'T':'𑣗', 'u':'𑣢', 'U':'𑣘', 'v':'ꔈ', 
+    'V':'𑣙', 'w':'𑣝', 'W':'𑣞', 'x':'ꔂ', 'X':'𑣚', 'y':'𑣟', 'Y':'𑣡', 'z':'ꔏ', 
+    'Z':'𑣜', '!':'ꔐ', '@':'ꔒ', '#':'ꔓ', '%':'ꔕ', '&':'ꔖ', '*':'ꔗ', '(':'ꔘ', ')':'ꔙ', 
+    '-':'ꔚ', '_':'ꔛ', '=':'ꔜ', '{': 'ꔝ', '}': 'ꔞ', '[': 'ꔟ', ']': 'ꔠ', ';': 'ꔡ', 
+    ':':'ꔢ', "'":'ꔣ', ',':'ꔤ', '<':'ꔥ', '>':'ꔦ', '.':'ꔧ', '/':'ꔨ', '?':'ꔩ', 
+    '|':'ꔪ', '1':'ꔫ', '2':'ꔬ','3':'ꔮ', '4':'ꔯ', '5':'ꔰ', '6':'ꔱ', '7':'ꔲ', '8':'ꔳ', 
+    '9':'ꔴ', '0':'ꔵ'}
 
-def mensagem(msg,texto_janela):
-    msg1 = QMessageBox()
-    msg1.setIcon(QMessageBox.Information)
-    msg1.setWindowTitle(texto_janela)
-    msg1.setText(msg)
-    x = msg1.exec()
+# Dicionário de decodificação mapeando símbolos para caracteres originais
+DECODIFICA = {v: k for k, v in CODIFICA.items()}
 
-
+# Codifica o texto usando o dicionário CODIFICA
 def codificar(texto):
-    
-    dados = texto.replace("a", "ꔽ").replace("á", "𑢡").replace("à", "𑢢").replace("â", "𑢥").replace("ã", "𑢧")\
-        .replace("A", "𑢾").replace("Á", "𑢨").replace("Á", "𑢨").replace("À", "𑢫").replace("Â", "𑢬").replace("Ã", "𑢭")\
-        .replace("b", "ꔑ").replace("B", "𑢯").replace("c", "ꔾ").replace("C", "𑢱").replace("d", "ꔉ").replace("D", "𑢳")\
-        .replace("e", "ꔿ").replace("é", "ꔃ").replace("ê", "𑢴").replace("E", "𑢶").replace("É", "𑢷").replace("Ê", "𑢹")\
-        .replace("f", "𑣤").replace("F", "𑢺").replace("g", "ꕀ").replace("G", "𑢽").replace("h", "ꔊ").replace("H", "𑢾")\
-        .replace("i", "ꔀ").replace("I", "𑣊").replace("j", "ꔄ").replace("J", "𑣋").replace("l", "ꔌ").replace("L", "𑣌")\
-        .replace("m", "ꕁ").replace("M", "𑣍").replace("o", "ꔅ").replace("ó", "𑣎").replace("ô", "𑣑").replace("O", "𑣏")\
-        .replace("Ó", "𑣐").replace("Ô", "𑣒").replace("p", "ꔆ").replace("P", "𑣓").replace("q", "ꔍ").replace("Q", "𑣔")\
-        .replace("r", "ꔁ").replace("R", "𑣕").replace("s", "ꔇ").replace("S", "𑣖").replace("t", "ꔎ").replace("T", "𑣗")\
-        .replace("u", "𑣢").replace("U", "𑣘").replace("v", "ꔈ").replace("V", "𑣙").replace("w", "𑣝").replace("W", "𑣞")\
-        .replace("x", "ꔂ").replace("X", "𑣚").replace("y", "𑣟").replace("Y", "𑣡").replace("z", "ꔏ").replace("Z", "𑣜")\
-        .replace("!", "ꔐ").replace("@", "ꔒ").replace("#", "ꔓ").replace("%", "ꔕ").replace("&", "ꔖ").replace("*", "ꔗ")\
-        .replace("(", "ꔘ").replace(")", "ꔙ").replace("-", "ꔚ").replace("_", "ꔛ").replace("=", "ꔜ").replace("{", "ꔝ")\
-        .replace("}", "ꔞ").replace("[", "ꔟ").replace("]", "ꔠ").replace(";", "ꔡ").replace(":", "ꔢ").replace("'", "ꔣ")\
-        .replace(",", "ꔤ").replace("<", "ꔥ").replace(">", "ꔦ").replace(".", "ꔧ").replace("/", "ꔨ").replace("?", "ꔩ")\
-        .replace("|", "ꔪ").replace("1", "ꔫ").replace("2", "ꔬ").replace("3", "ꔮ").replace("4", "ꔯ")\
-        .replace("5", "ꔰ").replace("6", "ꔱ").replace("7", "ꔲ").replace("8", "ꔳ").replace("9", "ꔴ").replace("0", "ꔵ")
-    return dados
+  return ''.join([CODIFICA.get(c, c) for c in texto])
 
-
+# Decodifica o texto usando o dicionário DECODIFICA  
 def decodificar(texto):
-    dados = texto.replace("ꔽ", "a").replace("𑢡", "á").replace("𑢢", "à").replace("𑢥", "â").replace("𑢧", "ã")\
-        .replace("𑢾", "A").replace("𑢨", "Á").replace("𑢫", "À").replace("𑢬", "Â").replace("𑢭", "Ã")\
-        .replace("ꔑ", "b").replace("𑢯", "B").replace("ꔾ", "c").replace("𑢱", "C").replace("ꔉ", "d").replace("𑢳", "D")\
-        .replace("ꔿ", "e").replace("ꔃ", "é").replace("𑢴", "ê").replace("𑢶", "E").replace("𑢷", "É").replace("𑢹", "Ê")\
-        .replace("𑣤", "f").replace("𑢺", "F").replace("ꕀ", "g").replace("𑢽", "G").replace("ꔊ", "h").replace("𑢾", "H")\
-        .replace("ꔀ", "i").replace("𑣊", "I").replace("ꔄ", "j").replace("𑣋", "J").replace("ꔌ", "l").replace("𑣌", "L")\
-        .replace("ꕁ", "m").replace("𑣍", "M").replace("ꔅ", "o").replace("𑣎", "ó").replace("𑣑", "ô").replace("𑣏", "O")\
-        .replace("𑣐", "Ó").replace("𑣒", "Ô").replace("ꔆ", "p").replace("𑣓", "P").replace("ꔍ", "q").replace("𑣔", "Q")\
-        .replace("ꔁ", "r").replace("𑣕", "R").replace("ꔇ", "s").replace("𑣖", "S").replace("ꔎ", "t").replace("𑣗", "T")\
-        .replace("𑣢", "u").replace("𑣘", "U").replace("ꔈ", "v").replace("𑣙", "V").replace("𑣝", "w").replace("𑣞", "W")\
-        .replace("ꔂ", "x").replace("𑣚", "X").replace("𑣟", "y").replace("𑣡", "Y").replace("ꔏ", "z").replace("𑣜", "Z")\
-        .replace("ꔐ", "!").replace("ꔒ", "@").replace("ꔓ", "#").replace("ꔕ", "%").replace("ꔖ", "&").replace("ꔗ", "*")\
-        .replace("ꔘ", "(").replace("ꔙ", ")").replace("ꔚ", "-").replace("ꔛ", "_").replace("ꔜ", "=").replace("ꔝ", "{")\
-        .replace("ꔞ", "}").replace("ꔟ", "[").replace("ꔠ", "]").replace("ꔡ", ";").replace("ꔢ", ":").replace("ꔣ", "'")\
-        .replace("ꔤ", ",").replace("ꔥ", "<").replace("ꔦ", ">").replace("ꔧ", ".").replace("ꔨ", "/").replace("ꔩ", "?")\
-        .replace("ꔪ", "|").replace("ꔫ", "1").replace("ꔬ", "2").replace("ꔮ", "3").replace("ꔯ", "4")\
-        .replace("ꔰ", "5").replace("ꔱ", "6").replace("ꔲ", "7").replace("ꔳ", "8").replace("ꔴ", "9").replace("ꔵ", "0")
-    return dados
+  return ''.join([DECODIFICA.get(c, c) for c in texto])
 
+# Exibe caixa de mensagem com título e texto fornecidos
+def mostrar_mensagem(msg, titulo):
+  msg = QMessageBox()
+  msg.setIcon(QMessageBox.Information)
+  msg.setWindowTitle(titulo)
+  msg.setText(msg)
+  msg.exec_()
+  
+# Limpa o conteúdo da caixa de texto  
+def limpar_texto():
+  tela.txt_texto.clear()
 
-def executa_codificador():
-    if tela.txt_texto.toPlainText() != "":
-        tela.txt_texto.setText(codificar(tela.txt_texto.toPlainText()))        
+# Pega o texto, codifica e mostra mensagem se vazio
+def executar_codificacao():
+  texto = tela.txt_texto.toPlainText()
+  if texto:
+    tela.txt_texto.setPlainText(codificar(texto))
+  else:
+    mostrar_mensagem('Favor digitar um texto!', 'Atenção')
+    
+# Pega o texto, decodifica e mostra mensagem se vazio  
+def executar_decodificacao():
+  texto = tela.txt_texto.toPlainText()
+  if texto:
+    tela.txt_texto.setPlainText(decodificar(texto))
+  else:
+    mostrar_mensagem('Favor digitar um texto!', 'Atenção')
 
-    else:
-        mensagem("Favor digitar um texto!", "Atenção")
+# Cria a aplicação Qt    
+app = QApplication(sys.argv)
 
+# Carrega interface criada no Qt Designer
+tela = uic.loadUi("conversor.ui")  
 
-def executa_decodificador():
-    if tela.txt_texto.toPlainText() != "":
-        tela.txt_texto.setText(decodificar(tela.txt_texto.toPlainText()))       
-
-    else:
-        mensagem("Favor digitar um texto!", "Atenção")
-
-
-def limpar_texto(mensagem):
-    tela.txt_texto.setText("")
-
-
-
-app = QtWidgets.QApplication([])
-tela = uic.loadUi("conversor.ui")
+# Define tamanho fixo para a janela
 tela.setFixedSize(400, 554)
-tela.bt_encriptar.clicked.connect(executa_codificador)
-tela.bt_desencriptar.clicked.connect(executa_decodificador)
-tela.bt_limpar.clicked.connect(limpar_texto)
 
-tela.show()
+# Vincula métodos aos eventos de clique dos botões
+tela.bt_encriptar.clicked.connect(executar_codificacao)
+tela.bt_desencriptar.clicked.connect(executar_decodificacao)
+tela.bt_limpar.clicked.connect(limpar_texto)  
+
+# Exibe a janela
+tela.show() 
+
+# Executa o loop de eventos da aplicação
 app.exec()
